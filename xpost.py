@@ -121,12 +121,19 @@ def tweet():
         tweet_text = compose_tweet(word, meaning, sentence)
         try:
             print("[DEBUG] Posting Tweet...")
-            api.update_status(tweet_text)
-            print("[SUCCESS] Tweet posted!")
+            # Use the v2 API instead of the deprecated v1.1 API
+            client = tweepy.Client(
+                consumer_key=API_KEY,
+                consumer_secret=API_SECRET,
+                access_token=ACCESS_TOKEN,
+                access_token_secret=ACCESS_SECRET
+            )
+            response = client.create_tweet(text=tweet_text)
+            print(f"[SUCCESS] Tweet posted! Tweet ID: {response.data['id']}")
 
             tweeted_words.append(word.lower())
             save_tweeted_words(tweeted_words)
-        except tweepy.TweepError as e:
+        except Exception as e:
             print(f"[ERROR] Twitter API error: {e}")
     else:
         print("[ERROR] No valid word found. Skipping tweet.")
