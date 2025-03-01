@@ -13,6 +13,9 @@ ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 ACCESS_SECRET = os.getenv("ACCESS_SECRET")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+# File to store previously tweeted words
+TWEET_HISTORY_FILE = "tweeted_words.txt"
+
 # Add these constants
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO = os.getenv("GITHUB_REPOSITORY")  # Format: "username/repo"
@@ -22,9 +25,6 @@ GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{TWEET_HI
 auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True)
-
-# File to store previously tweeted words
-TWEET_HISTORY_FILE = "tweeted_words.txt"
 
 def load_tweeted_words():
     try:
