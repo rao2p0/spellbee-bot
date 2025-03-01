@@ -51,29 +51,49 @@ def get_unique_word(existing_words, retries=3, delay=5):
             # Print the raw response to debug its structure
             print(f"[DEBUG] Raw OpenAI API response: {response}")
 
-            # Ensure that choices are present in the response
-            if 'choices' not in response or not response['choices']:
-                print(f"[ERROR] No choices found in response: {response}")
-                continue
-
-            # Correctly access the content in the first choice's message
-            message_content = response['choices'][0].message['content'].strip()
+            # Access the content correctly from the response object
+            message_content = response.choices[0].message.content.strip()
             
             # If no content, skip to the next retry
             if not message_content:
-                print(f"[ERROR] No valid content in the response: {response}")
+                print(f"[ERROR] No valid content in the response")
                 continue
             
             print(f"[DEBUG] OpenAI Response: {message_content}")
 
             # Split the response into lines and extract word, meaning, and sentence
             lines = message_content.split("\n")
-            word = lines[0].split(":")[1].strip() if ":" in lines[0] else lines[0].strip()
-            meaning = lines[1].split(":")[1].strip() if ":" in lines[1] else lines[1].strip()
-            sentence = lines[2].split(":")[1].strip() if ":" in lines[2] else lines[2].strip()
-
-            if word.lower() not in existing_words:
+            
+            # More robust parsing of the response
+            word = None
+            meaning = None
+            sentence = None
+            
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                if line.lower().startswith("word:") or line.lower().startswith("word "):
+                    word = line.split(":", 1)[1].strip() if ":" in line else line.replace("Word", "", 1).strip()
+                elif line.lower().startswith("meaning:") or line.lower().startswith("meaning "):
+                    meaning = line.split(":", 1)[1].strip() if ":" in line else line.replace("Meaning", "", 1).strip()
+                elif line.lower().startswith("example:") or line.lower().startswith("example ") or line.lower().startswith("example sentence:"):
+                    sentence = line.split(":", 1)[1].strip() if ":" in line else line.replace("Example sentence", "", 1).replace("Example", "", 1).strip()
+            
+            # If we couldn't parse the response properly, try a different approach
+            if not all([word, meaning, sentence]):
+                if len(lines) >= 3:
+                    word = lines[0].split(":", 1)[1].strip() if ":" in lines[0] else lines[0].strip()
+                    meaning = lines[1].split(":", 1)[1].strip() if ":" in lines[1] else lines[1].strip()
+                    sentence = lines[2].split(":", 1)[1].strip() if ":" in lines[2] else lines[2].strip()
+            
+            if word and word.lower() not in existing_words:
                 return word, meaning, sentence
+            elif word:
+                print(f"[DEBUG] Word '{word}' already used. Trying again...")
+            else:
+                print(f"[ERROR] Could not parse word from response: {message_content}")
 
         except Exception as e:
             print(f"[ERROR] OpenAI API error: {e}")
