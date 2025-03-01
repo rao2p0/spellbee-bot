@@ -104,8 +104,8 @@ def get_unique_word(existing_words, retries=3, delay=5):
 
 # Compose Tweet
 def compose_tweet(word, meaning, sentence):
-    hashtags = "#vocabulary #spellbee"
-    tweet = f"Word of the day: {word}\n\nMeaning: {meaning}\n\nExample: {sentence}\n\n{hashtags}"
+    hashtags = "#vocabulary #spellingbee"
+    tweet = f"Word: {word}\n\nMeaning: {meaning}\n\nExample: {sentence}\n\n{hashtags}"
     print(f"[DEBUG] Composed Tweet: {tweet}")
     return tweet
 
