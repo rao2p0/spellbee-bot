@@ -13,9 +13,6 @@ ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 ACCESS_SECRET = os.getenv("ACCESS_SECRET")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# File to store previously tweeted words
-TWEET_HISTORY_FILE = "tweeted_words.txt"
-
 # Add these constants
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_REPO = os.getenv("GITHUB_REPOSITORY")  # Format: "username/repo"
@@ -25,6 +22,9 @@ GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{TWEET_HI
 auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True)
+
+# File to store previously tweeted words
+TWEET_HISTORY_FILE = "tweeted_words.txt"
 
 def load_tweeted_words():
     try:
@@ -88,15 +88,25 @@ def get_unique_word(existing_words, retries=3, delay=5):
         try:
             print(f"[DEBUG] Attempt {attempt + 1}: Querying OpenAI API...")
             
+            # Only include the last 5 words to save tokens
+            recent_words = existing_words[-5:] if existing_words else []
+            avoid_text = f" Avoid these recently used words: {', '.join(recent_words)}." if recent_words else ""
+            
+            # Add randomness to the prompt itself
+            categories = ["academic", "literary", "scientific", "philosophical", "technical", "artistic", "historical"]
+            random_category = categories[int(time.time()) % len(categories)]
+            
             # Use the new OpenAI API format for chat completion
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",  # Specify your model here
+                model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": "Provide a unique, interesting word, its meaning, and an example sentence."}
+                    {"role": "system", "content": f"You are a vocabulary expert. Provide interesting, uncommon words.{avoid_text}"},
+                    {"role": "user", "content": f"Give me a challenging {random_category} word that would be useful in a spelling bee. Include its definition and usage example."}
                 ],
                 max_tokens=100,
-                temperature=0.8
+                temperature=1.0,  # Maximum randomness
+                presence_penalty=1.0,  # Penalize repeated tokens
+                frequency_penalty=1.0  # Penalize frequent tokens
             )
             
             # Print the raw response to debug its structure
