@@ -21,9 +21,18 @@ TWEET_HISTORY_FILE = "tweeted_words.json"
 
 def load_tweeted_words():
     if os.path.exists(TWEET_HISTORY_FILE):
-        with open(TWEET_HISTORY_FILE, "r") as file:
-            return json.load(file)
-    return []
+        try:
+            with open(TWEET_HISTORY_FILE, "r") as file:
+                return json.load(file)
+        except json.JSONDecodeError:
+            print("[WARNING] Could not decode JSON from history file. Starting with empty history.")
+            return []
+    else:
+        print("[INFO] No history file found. Creating a new one.")
+        # Create an empty file
+        with open(TWEET_HISTORY_FILE, "w") as file:
+            json.dump([], file)
+        return []
 
 def save_tweeted_words(words):
     with open(TWEET_HISTORY_FILE, "w") as file:
