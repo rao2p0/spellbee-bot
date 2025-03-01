@@ -29,17 +29,26 @@ def save_tweeted_words(words):
     with open(TWEET_HISTORY_FILE, "w") as file:
         json.dump(words, file)
 
+# Set up OpenAI client
+openai.api_key = OPENAI_API_KEY
+
 # Query OpenAI with Logging
 def get_unique_word(existing_words, retries=3, delay=5):
     for attempt in range(retries):
         try:
             print(f"[DEBUG] Attempt {attempt + 1}: Querying OpenAI API...")
+            
+            # Use the new OpenAI API format for chat completion
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "system", "content": "Provide a unique, interesting word, its meaning, and an example sentence."}],
+                model="gpt-4o-mini-2024-07-18",  # Your specific model
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": "Provide a unique, interesting word, its meaning, and an example sentence."}
+                ],
                 max_tokens=100
             )
-            result = response["choices"][0]["message"]["content"]
+
+            result = response["choices"][0]["message"]["content"].strip()
             print(f"[DEBUG] OpenAI Response: {result}")
 
             lines = result.split("\n")
