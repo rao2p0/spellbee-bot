@@ -51,22 +51,23 @@ def get_unique_word(existing_words, retries=3, delay=5):
             # Print the raw response to debug its structure
             print(f"[DEBUG] Raw OpenAI API response: {response}")
 
-            # Validate the response structure before accessing it
+            # Ensure that choices are present in the response
             if 'choices' not in response or not response['choices']:
                 print(f"[ERROR] No choices found in response: {response}")
                 continue
 
-            result = response['choices'][0].get('message', {}).get('content', '').strip()
-
-            # Check if we got a valid result
-            if not result:
+            # Correctly access the content in the first choice's message
+            message_content = response['choices'][0].message['content'].strip()
+            
+            # If no content, skip to the next retry
+            if not message_content:
                 print(f"[ERROR] No valid content in the response: {response}")
                 continue
             
-            print(f"[DEBUG] OpenAI Response: {result}")
+            print(f"[DEBUG] OpenAI Response: {message_content}")
 
             # Split the response into lines and extract word, meaning, and sentence
-            lines = result.split("\n")
+            lines = message_content.split("\n")
             word = lines[0].split(":")[1].strip() if ":" in lines[0] else lines[0].strip()
             meaning = lines[1].split(":")[1].strip() if ":" in lines[1] else lines[1].strip()
             sentence = lines[2].split(":")[1].strip() if ":" in lines[2] else lines[2].strip()
