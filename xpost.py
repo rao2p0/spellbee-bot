@@ -17,26 +17,30 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # File to store previously tweeted words
-TWEET_HISTORY_FILE = "tweeted_words.json"
+TWEET_HISTORY_FILE = "tweeted_words.txt"
 
 def load_tweeted_words():
     if os.path.exists(TWEET_HISTORY_FILE):
         try:
             with open(TWEET_HISTORY_FILE, "r") as file:
-                return json.load(file)
-        except json.JSONDecodeError:
-            print("[WARNING] Could not decode JSON from history file. Starting with empty history.")
+                # Read all lines and strip whitespace, filter out empty lines
+                words = [line.strip().lower() for line in file.readlines() if line.strip()]
+                print(f"[INFO] Loaded {len(words)} words from history file.")
+                return words
+        except Exception as e:
+            print(f"[WARNING] Error reading history file: {e}. Starting with empty history.")
             return []
     else:
         print("[INFO] No history file found. Creating a new one.")
         # Create an empty file
-        with open(TWEET_HISTORY_FILE, "w") as file:
-            json.dump([], file)
+        open(TWEET_HISTORY_FILE, "w").close()
         return []
 
 def save_tweeted_words(words):
     with open(TWEET_HISTORY_FILE, "w") as file:
-        json.dump(words, file)
+        # Write each word on a new line
+        for word in words:
+            file.write(f"{word}\n")
 
 # Set up OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
