@@ -3,7 +3,7 @@ name: Twitter Bot
 on:
   schedule:
     - cron: "0 */4 * * *"  # Runs every 4 hours
-  workflow_dispatch:  # Allows manual runs
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   tweet:
@@ -19,7 +19,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install Dependencies
-        run: pip install tweepy
+        run: pip install tweepy openai python-dotenv
 
       - name: Run Twitter Bot
         env:
@@ -27,4 +27,5 @@ jobs:
           API_SECRET: ${{ secrets.API_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python xpost.py
