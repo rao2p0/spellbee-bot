@@ -96,12 +96,18 @@ def get_unique_word(existing_words, retries=3, delay=5):
             categories = ["academic", "literary", "scientific", "philosophical", "technical", "artistic", "historical"]
             random_category = categories[int(time.time()) % len(categories)]
             
+            # Debug the input messages
+            system_message = f"You are a vocabulary expert. Provide interesting, uncommon words.{avoid_text}"
+            user_message = f"Give me a challenging {random_category} word that would be useful in a spelling bee. Include its definition and usage example."
+            print(f"[DEBUG] System message: {system_message}")
+            print(f"[DEBUG] User message: {user_message}")
+            
             # Use the new OpenAI API format for chat completion
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": f"You are a vocabulary expert. Provide interesting, uncommon words.{avoid_text}"},
-                    {"role": "user", "content": f"Give me a challenging {random_category} word that would be useful in a spelling bee. Include its definition and usage example."}
+                    {"role": "system", "content": system_message},
+                    {"role": "user", "content": user_message}
                 ],
                 max_tokens=100,
                 temperature=1.0,  # Maximum randomness
