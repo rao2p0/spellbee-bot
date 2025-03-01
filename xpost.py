@@ -1,5 +1,5 @@
 import tweepy
-import openai
+from openai import OpenAI
 import os
 import json
 import time
@@ -30,7 +30,7 @@ def save_tweeted_words(words):
         json.dump(words, file)
 
 # Set up OpenAI client
-openai.api_key = OPENAI_API_KEY
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # Query OpenAI with Logging
 def get_unique_word(existing_words, retries=3, delay=5):
@@ -39,7 +39,7 @@ def get_unique_word(existing_words, retries=3, delay=5):
             print(f"[DEBUG] Attempt {attempt + 1}: Querying OpenAI API...")
             
             # Use the new OpenAI API format for chat completion
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-4o-mini-2024-07-18",  # Your specific model
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
