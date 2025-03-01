@@ -48,12 +48,12 @@ def get_unique_word(existing_words, retries=3, delay=5):
                 max_tokens=100
             )
 
- # Correctly access the content of the response
-            result = response['choices'][0]['message']['content'].strip() if response.get('choices') else None
-            if not result:
-                print(f"[ERROR] No content in the response.")
+            # Correctly access the content of the response
+            if not response or 'choices' not in response or not response['choices']:
+                print(f"[ERROR] Invalid response format.")
                 continue
-            
+
+            result = response['choices'][0]['message']['content'].strip()
             print(f"[DEBUG] OpenAI Response: {result}")
 
             lines = result.split("\n")
