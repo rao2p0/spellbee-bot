@@ -145,8 +145,16 @@ def tweet():
             response = client.create_tweet(text=tweet_text)
             print(f"[SUCCESS] Tweet posted! Tweet ID: {response.data['id']}")
 
+            # Add debugging for word storage
+            print(f"[DEBUG] Adding word '{word}' to history...")
             tweeted_words.append(word.lower())
+            print(f"[DEBUG] Updated word list: {tweeted_words}")
             save_tweeted_words(tweeted_words)
+            print(f"[DEBUG] Word history saved to {TWEET_HISTORY_FILE}")
+            
+            # Verify the file was written correctly
+            verification = load_tweeted_words()
+            print(f"[DEBUG] Verification - words in file after save: {verification}")
         except Exception as e:
             print(f"[ERROR] Twitter API error: {e}")
     else:
