@@ -58,7 +58,8 @@ def get_unique_word(existing_words, retries=3, delay=5):
                     {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": "Provide a unique, interesting word, its meaning, and an example sentence."}
                 ],
-                max_tokens=100
+                max_tokens=100,
+                temperature=0.8
             )
             
             # Print the raw response to debug its structure
