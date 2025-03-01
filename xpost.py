@@ -40,7 +40,7 @@ def get_unique_word(existing_words, retries=3, delay=5):
             
             # Use the new OpenAI API format for chat completion
             response = client.chat.completions.create(
-                model="gpt-4o-mini",  # Your specific model
+                model="gpt-3.5-turbo", # gpt-4o-mini,  # Your specific model
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": "Provide a unique, interesting word, its meaning, and an example sentence."}
