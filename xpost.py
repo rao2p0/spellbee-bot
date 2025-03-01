@@ -40,22 +40,32 @@ def get_unique_word(existing_words, retries=3, delay=5):
             
             # Use the new OpenAI API format for chat completion
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo", # gpt-4o-mini,  # Your specific model
+                model="gpt-3.5-turbo",  # Specify your model here
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": "Provide a unique, interesting word, its meaning, and an example sentence."}
                 ],
                 max_tokens=100
             )
+            
+            # Print the raw response to debug its structure
+            print(f"[DEBUG] Raw OpenAI API response: {response}")
 
-            # Correctly access the content of the response
-            if not response or 'choices' not in response or not response['choices']:
-                print(f"[ERROR] Invalid response format.")
+            # Validate the response structure before accessing it
+            if 'choices' not in response or not response['choices']:
+                print(f"[ERROR] No choices found in response: {response}")
                 continue
 
-            result = response['choices'][0]['message']['content'].strip()
+            result = response['choices'][0].get('message', {}).get('content', '').strip()
+
+            # Check if we got a valid result
+            if not result:
+                print(f"[ERROR] No valid content in the response: {response}")
+                continue
+            
             print(f"[DEBUG] OpenAI Response: {result}")
 
+            # Split the response into lines and extract word, meaning, and sentence
             lines = result.split("\n")
             word = lines[0].split(":")[1].strip() if ":" in lines[0] else lines[0].strip()
             meaning = lines[1].split(":")[1].strip() if ":" in lines[1] else lines[1].strip()
@@ -63,7 +73,7 @@ def get_unique_word(existing_words, retries=3, delay=5):
 
             if word.lower() not in existing_words:
                 return word, meaning, sentence
-            
+
         except Exception as e:
             print(f"[ERROR] OpenAI API error: {e}")
             time.sleep(delay)
