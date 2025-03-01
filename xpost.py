@@ -48,7 +48,7 @@ def get_unique_word(existing_words, retries=3, delay=5):
                 max_tokens=100
             )
 
-            result = response["choices"][0]["message"]["content"].strip()
+            result = response['choices'][0]['message']['content'].strip()
             print(f"[DEBUG] OpenAI Response: {result}")
 
             lines = result.split("\n")
