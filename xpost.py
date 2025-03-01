@@ -3,6 +3,8 @@ from openai import OpenAI
 import os
 import json
 import time
+import base64
+import requests
 
 # Load API keys
 API_KEY = os.getenv("API_KEY")
@@ -10,6 +12,11 @@ API_SECRET = os.getenv("API_SECRET")
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 ACCESS_SECRET = os.getenv("ACCESS_SECRET")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Add these constants
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_REPO = os.getenv("GITHUB_REPOSITORY")  # Format: "username/repo"
+GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{TWEET_HISTORY_FILE}"
 
 # Authenticate with Twitter
 auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
@@ -20,27 +27,57 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 TWEET_HISTORY_FILE = "tweeted_words.txt"
 
 def load_tweeted_words():
-    if os.path.exists(TWEET_HISTORY_FILE):
-        try:
-            with open(TWEET_HISTORY_FILE, "r") as file:
-                # Read all lines and strip whitespace, filter out empty lines
-                words = [line.strip().lower() for line in file.readlines() if line.strip()]
-                print(f"[INFO] Loaded {len(words)} words from history file.")
-                return words
-        except Exception as e:
-            print(f"[WARNING] Error reading history file: {e}. Starting with empty history.")
+    try:
+        # Get file from GitHub repo
+        headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+        response = requests.get(GITHUB_API_URL, headers=headers)
+        
+        if response.status_code == 200:
+            # File exists, decode content
+            content = response.json()["content"]
+            decoded_content = base64.b64decode(content).decode("utf-8")
+            words = [line.strip().lower() for line in decoded_content.splitlines() if line.strip()]
+            print(f"[INFO] Loaded {len(words)} words from GitHub repository.")
+            return words
+        elif response.status_code == 404:
+            # File doesn't exist yet
+            print("[INFO] No history file found in repository. Starting with empty history.")
             return []
-    else:
-        print("[INFO] No history file found. Creating a new one.")
-        # Create an empty file
-        open(TWEET_HISTORY_FILE, "w").close()
+        else:
+            print(f"[WARNING] GitHub API error: {response.status_code}. Starting with empty history.")
+            return []
+    except Exception as e:
+        print(f"[WARNING] Error loading history: {e}. Starting with empty history.")
         return []
 
 def save_tweeted_words(words):
-    with open(TWEET_HISTORY_FILE, "w") as file:
-        # Write each word on a new line
-        for word in words:
-            file.write(f"{word}\n")
+    try:
+        # Prepare content
+        content = "\n".join(words)
+        encoded_content = base64.b64encode(content.encode("utf-8")).decode("utf-8")
+        
+        # Get current file SHA if it exists
+        headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+        response = requests.get(GITHUB_API_URL, headers=headers)
+        
+        data = {
+            "message": "Update tweeted words history",
+            "content": encoded_content,
+        }
+        
+        if response.status_code == 200:
+            # File exists, include SHA for update
+            data["sha"] = response.json()["sha"]
+        
+        # Update or create file
+        response = requests.put(GITHUB_API_URL, headers=headers, json=data)
+        
+        if response.status_code in (200, 201):
+            print("[INFO] Successfully saved word history to GitHub repository.")
+        else:
+            print(f"[ERROR] Failed to save history to GitHub: {response.status_code}, {response.text}")
+    except Exception as e:
+        print(f"[ERROR] Error saving history to GitHub: {e}")
 
 # Set up OpenAI client
 client = OpenAI(api_key=OPENAI_API_KEY)
