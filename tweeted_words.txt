@@ -19,3 +19,4 @@ hagiography
 zetetic
 oxymoron
 catenation
+osmoregulation
