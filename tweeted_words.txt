@@ -16,3 +16,4 @@ chromatophore
 polysemy
 apotheosis
 hagiography
+zetetic
