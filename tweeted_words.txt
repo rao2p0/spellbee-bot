@@ -22,3 +22,4 @@ catenation
 osmoregulation
 quadragesimal
 palimpsest
+ontological
