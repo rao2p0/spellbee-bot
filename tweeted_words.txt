@@ -24,3 +24,4 @@ quadragesimal
 palimpsest
 ontological
 obsequious
+akrasia
