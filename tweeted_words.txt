@@ -36,3 +36,4 @@ zymology
 epistemology
 syzygy
 "sesquipedalian"
+sfumato
