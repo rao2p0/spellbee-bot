@@ -35,3 +35,4 @@ obstreperous
 zymology
 epistemology
 syzygy
+"sesquipedalian"
