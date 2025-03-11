@@ -39,3 +39,4 @@ syzygy
 sfumato
 anfractuous
 amanuensis
+labyrinthine
