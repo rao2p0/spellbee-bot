@@ -38,3 +38,4 @@ syzygy
 "sesquipedalian"
 sfumato
 anfractuous
+amanuensis
