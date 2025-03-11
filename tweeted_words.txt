@@ -42,3 +42,4 @@ amanuensis
 labyrinthine
 hautbois
 tenebrous
+quasiperiodic
