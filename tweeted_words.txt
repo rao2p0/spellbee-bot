@@ -43,3 +43,4 @@ labyrinthine
 hautbois
 tenebrous
 quasiperiodic
+perspicacity
