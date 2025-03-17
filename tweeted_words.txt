@@ -66,3 +66,4 @@ esoteric
 ensorcell
 sphygmomanometer
 thalweg
+**abecedarian**
