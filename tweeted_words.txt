@@ -89,3 +89,4 @@ draconian
 concinnity
 hippopotomonstrosesquipedalian
 pococurante
+seriatim
