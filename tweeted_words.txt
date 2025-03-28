@@ -105,3 +105,4 @@ circumlocution
 ontology
 pneumonoultramicroscopicsilicovolcanoconiosis
 pleonasm
+esquisse
