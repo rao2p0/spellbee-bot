@@ -106,3 +106,4 @@ ontology
 pneumonoultramicroscopicsilicovolcanoconiosis
 pleonasm
 esquisse
+ataraxia
