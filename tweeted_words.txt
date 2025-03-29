@@ -108,3 +108,4 @@ pleonasm
 esquisse
 ataraxia
 ouroboros
+chromolithography
