@@ -148,3 +148,4 @@ zoosemiotics
 extemporaneous
 psychoneuroendocrinology
 pernicious
+electroencephalography
