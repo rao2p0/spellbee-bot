@@ -171,3 +171,4 @@ hippocrene
 hierophant
 epanalepsis
 sycophant
+quaestor
