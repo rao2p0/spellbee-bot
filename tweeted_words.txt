@@ -172,3 +172,4 @@ hierophant
 epanalepsis
 sycophant
 quaestor
+polyglot
