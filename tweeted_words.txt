@@ -188,3 +188,4 @@ solecism
 **quixotic**
 pulchritude
 ecdysiast
+eudaemonic
