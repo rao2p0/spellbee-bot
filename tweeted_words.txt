@@ -194,3 +194,4 @@ roentgenogram
 psychrometer
 quaquaversal
 hippopotomonstrosesquippedaliophobia
+sesquipedalianism
