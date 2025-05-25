@@ -260,3 +260,4 @@ dichlorodiphenyltrichloroethane
 eudiometer
 vellichor
 "perspicacious"
+oscillography
