@@ -259,3 +259,4 @@ hodiernal
 dichlorodiphenyltrichloroethane
 eudiometer
 vellichor
+"perspicacious"
