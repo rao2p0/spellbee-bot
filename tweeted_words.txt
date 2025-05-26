@@ -263,3 +263,4 @@ vellichor
 oscillography
 ostracism
 phonotaxis
+tachyphylaxis
