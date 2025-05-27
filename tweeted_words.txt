@@ -265,3 +265,4 @@ ostracism
 phonotaxis
 tachyphylaxis
 aplomb
+ecdysis
