@@ -267,3 +267,4 @@ tachyphylaxis
 aplomb
 ecdysis
 sussurous
+** esemplastic
