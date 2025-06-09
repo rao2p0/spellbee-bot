@@ -292,3 +292,4 @@ empyrean
 **chiaroscurist**
 **quasicrystal**
 hierophany
+"bibliothecary"
