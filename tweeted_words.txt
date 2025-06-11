@@ -297,3 +297,4 @@ sagacious
 **sapioseismic**
 **zoopharmacognosy**
 anamnesis
+"onomastic"
