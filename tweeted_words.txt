@@ -298,3 +298,4 @@ sagacious
 **zoopharmacognosy**
 anamnesis
 "onomastic"
+polymerase
