@@ -313,3 +313,4 @@ petrochronology
 *sesquipedalian*
 **zymology**
 **philoprogenitive**
+pneumatology
