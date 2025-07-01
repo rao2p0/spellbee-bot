@@ -338,3 +338,4 @@ zyzzyva
 cephalalgia
 characterized by long words; long-winded.
 logomachy
+quotidian
