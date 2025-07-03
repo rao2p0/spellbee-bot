@@ -342,3 +342,4 @@ quotidian
 ** bilious
 chromatophores
 gigantothermy
+strigil
