@@ -372,3 +372,4 @@ plasmodesmata
 photophosphorylation**
 phosphorylation
 nyctophile
+**ebullition**
