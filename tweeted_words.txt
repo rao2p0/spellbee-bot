@@ -373,3 +373,4 @@ photophosphorylation**
 phosphorylation
 nyctophile
 **ebullition**
+autodidact
