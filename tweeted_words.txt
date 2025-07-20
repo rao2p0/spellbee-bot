@@ -374,3 +374,4 @@ phosphorylation
 nyctophile
 **ebullition**
 autodidact
+isozyme
